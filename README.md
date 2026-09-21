@@ -1,4 +1,4 @@
-\# NutriTrack AI
+### NutriTrack AI
 
 
 
@@ -14,11 +14,11 @@ The project is being developed as a full-stack AWS and DevOps portfolio project,
 
 
 
-\## Architecture
+### Architecture
 
 
 
-\### Current Local Architecture
+### Current Local Architecture
 
 
 
@@ -26,25 +26,25 @@ The project is being developed as a full-stack AWS and DevOps portfolio project,
 
 Browser
 
-&#x20;  |
+###x20;  |
 
-&#x20;  v
+###x20;  v
 
 React + TypeScript
 
-&#x20;  |
+###x20;  |
 
-&#x20;  | HTTP REST API
+###x20;  | HTTP REST API
 
-&#x20;  v
+###x20;  v
 
 Node.js + Express
 
-&#x20;  |
+###x20;  |
 
-&#x20;  | SQL
+###x20;  | SQL
 
-&#x20;  v
+###x20;  v
 
 PostgreSQL
 
