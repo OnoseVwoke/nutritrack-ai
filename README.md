@@ -10,41 +10,30 @@ The project is being developed as a full-stack AWS and DevOps portfolio project,
 
 
 
-\---
-
-
-
-### Architecture
-
-
-
 ### Current Local Architecture
 
-
-
 ```text
-
-Browser
-
-###x20;  |
-
-###x20;  v
-
-React + TypeScript
-
-###x20;  |
-
-###x20;  | HTTP REST API
-
-###x20;  v
-
-Node.js + Express
-
-###x20;  |
-
-###x20;  | SQL
-
-###x20;  v
-
-PostgreSQL
-
++----------------------+
+|       Browser        |
++----------+-----------+
+           |
+           v
++----------------------+
+| React + TypeScript   |
+|      Frontend        |
++----------+-----------+
+           |
+           | HTTP REST API
+           v
++----------------------+
+| Node.js + Express    |
+|       Backend        |
++----------+-----------+
+           |
+           | SQL
+           v
++----------------------+
+|     PostgreSQL       |
+|      Database        |
++----------------------+
+```
