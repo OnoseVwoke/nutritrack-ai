@@ -10,38 +10,42 @@ on:
       - main
 
 jobs:
-  build:
-    name: Build Frontend and Backend
+  build-and-test:
+    name: Build and Test NutriTrack
     runs-on: ubuntu-latest
 
+    services:
+      postgres:
+        image: postgres:16
+
+        env:
+          POSTGRES_DB: nutritrack
+          POSTGRES_USER: nutritrack
+          POSTGRES_PASSWORD: nutritrack_password
+
+        ports:
+          - 5432:5432
+
+        options: >-
+          --health-cmd "pg_isready -U nutritrack -d nutritrack"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
     steps:
+
+      # --------------------------------
+      # Checkout
+      # --------------------------------
+
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # -------------------------
-      # Frontend
-      # -------------------------
+      # --------------------------------
+      # Backend
+      # --------------------------------
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: npm
-          cache-dependency-path: frontend/package-lock.json
-
-      - name: Install frontend dependencies
-        working-directory: frontend
-        run: npm ci
-
-      - name: Build frontend
-        working-directory: frontend
-        run: npm run build
-
-      # -------------------------
-      # Backend
-      # -------------------------
-
-      - name: Setup Node.js for backend
         uses: actions/setup-node@v4
         with:
           node-version: 20
@@ -54,4 +58,47 @@ jobs:
 
       - name: Build backend
         working-directory: backend
+        run: npm run build
+
+      # --------------------------------
+      # Start backend
+      # --------------------------------
+
+      - name: Start backend
+        working-directory: backend
+        env:
+          PORT: 3000
+          DATABASE_URL: postgresql://nutritrack:nutritrack_password@localhost:5432/nutritrack
+          FRONTEND_URL: http://localhost:5173
+        run: |
+          npm start > backend.log 2>&1 &
+          sleep 5
+
+      # --------------------------------
+      # API Tests
+      # --------------------------------
+
+      - name: Run API tests
+        env:
+          API_URL: http://localhost:3000/api
+        run: |
+          bash tests/api-tests.sh
+
+      # --------------------------------
+      # Frontend
+      # --------------------------------
+
+      - name: Setup Node.js for frontend
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install frontend dependencies
+        working-directory: frontend
+        run: npm ci
+
+      - name: Build frontend
+        working-directory: frontend
         run: npm run build
