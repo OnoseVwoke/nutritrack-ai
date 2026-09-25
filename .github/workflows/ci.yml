@@ -1,3 +1,4 @@
+@'
 name: NutriTrack CI
 
 on:
@@ -149,3 +150,29 @@ jobs:
       - name: Build frontend
         working-directory: frontend
         run: npm run build
+
+      # --------------------------------
+      # Docker
+      # --------------------------------
+
+      - name: Build backend Docker image
+        run: |
+          docker build \
+            -t nutritrack-backend:ci \
+            ./backend
+
+      - name: Build frontend Docker image
+        run: |
+          docker build \
+            -t nutritrack-frontend:ci \
+            ./frontend
+
+      # --------------------------------
+      # Docker verification
+      # --------------------------------
+
+      - name: Verify Docker images
+        run: |
+          docker images nutritrack-backend
+          docker images nutritrack-frontend
+'@ | Set-Content .github\workflows\ci.yml
